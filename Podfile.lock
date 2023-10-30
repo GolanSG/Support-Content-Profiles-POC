@@ -1,0 +1,16 @@
+PODS:
+  - GenesysCloudMessengerTransport (2.5.1)
+
+DEPENDENCIES:
+  - GenesysCloudMessengerTransport (= 2.5.1)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs:
+    - GenesysCloudMessengerTransport
+
+SPEC CHECKSUMS:
+  GenesysCloudMessengerTransport: 13fd8c8483aa2d5541bf8b1c8ebd51193c69b7bc
+
+PODFILE CHECKSUM: b9b84d7047b2b9b39d5d6e035c1d9a0159e72fbe
+
+COCOAPODS: 1.12.1
