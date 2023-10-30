@@ -15,8 +15,8 @@ struct Statement {
 class ViewController: UIViewController {
 
     var client: MessagingClient!
-    var uploadState: Attachment.State?
-    var messageWithAttachment: String?
+    var startTime: Date?
+    var endTime: Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,15 +38,10 @@ class ViewController: UIViewController {
             switch message {
             case let message as MessageEvent.AttachmentUpdated:
                 print("attachment state: \(message.attachment.state.description)")
-//                self.uploadState = message.attachment.state
                 
-//                if message.attachment.state is Attachment.StateUploaded {
-//                    if let text = self.messageWithAttachment {
-//                        try? self.client.sendMessage(text: text)
-//                        self.uploadState = nil
-//                        self.messageWithAttachment = nil
-//                    }
-//                }
+                if message.attachment.state is Attachment.StateUploaded {
+                    self.stopStopwatch()
+                }
             default:
                 break
             }
@@ -60,6 +55,23 @@ class ViewController: UIViewController {
         
     }
     
+    func startStopwatch() {
+        startTime = Date()
+        print("Stopwatch started.")
+    }
+
+    func stopStopwatch() {
+        guard let start = startTime else {
+            print("Stopwatch hasn't started yet.")
+            return
+        }
+        
+        endTime = Date()
+        
+        let elapsedTime = endTime!.timeIntervalSince(start)
+        print("Stopwatch stopped. Elapsed time: \(elapsedTime) seconds.")
+    }
+    
     @IBAction func sendMessage(_ sender: UIButton) {
         let alert = UIAlertController(title: "Send Message", message: "Enter the text you'd like to send.", preferredStyle: .alert)
         
@@ -69,14 +81,7 @@ class ViewController: UIViewController {
         
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { [weak alert] (_) in
             if let textField = alert?.textFields?[0], let text = textField.text {
-//                if self.uploadState is Attachment.StateUploaded {
-                    try? self.client?.sendMessage(text: text)
-//                    self.uploadState = nil
-//                    self.messageWithAttachment = nil
-//
-//                } else {
-//                    self.messageWithAttachment = text
-//                }
+                try? self.client?.sendMessage(text: text)
             }
         }))
         
@@ -96,7 +101,7 @@ class ViewController: UIViewController {
         }))
         actionSheet.addAction(UIAlertAction(title: "30 MB", style: .default, handler: { _ in
             self.attachImg(fileName: "true_size_image_30MB.jpg")
-        }))        
+        }))
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(actionSheet, animated: true, completion: nil)
@@ -115,6 +120,7 @@ class ViewController: UIViewController {
                     let byteArray = self.getArrayOfBytesFromImage(data: imageData)
                     do {
                         try self.client.attach(byteArray: byteArray, fileName: fileName)
+                        self.startStopwatch()
 
                     } catch {
                         print(error)
