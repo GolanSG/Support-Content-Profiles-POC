@@ -96,11 +96,7 @@ class ViewController: UIViewController {
         }))
         actionSheet.addAction(UIAlertAction(title: "30 MB", style: .default, handler: { _ in
             self.attachImg(fileName: "true_size_image_30MB.jpg")
-        }))
-        actionSheet.addAction(UIAlertAction(title: "55 MB", style: .default, handler: { _ in
-            self.attachImg(fileName: "true_size_image_55MB.jpg")
-        }))
-        
+        }))        
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(actionSheet, animated: true, completion: nil)
